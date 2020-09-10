@@ -106,6 +106,10 @@ public class WalletAddress {
 
   }
 
+  public String getSubaddressBase58(String privateViewKeyHex, long accountId, long subaddressId) {
+    return getSubaddressBase58(new Scalar(privateViewKeyHex), hexToBytes(getPublicSpendKeyHex()), accountId, subaddressId);
+  }
+
   public static void assertEquals(Object a, Object b) {
     if(!a.equals(b)) throw new RuntimeException("Assertion failed");
   }
@@ -114,10 +118,10 @@ public class WalletAddress {
     String mainAddress = "43amHgM9cDHhJY8tAujYi4MisCx4dvNQB5xVYbRLqPYLbVmH5qHcUgsjgsdoSdLK3TgRaBd68bCLaRcK8VakCUAJLGjz42G";
     WalletAddress walletAddress = new WalletAddress(mainAddress);
 
-    Scalar privateViewKey = new Scalar("7b37d8922245a07244fd31855d1e705a590a9bd2881825f0542ad99cdaba090a");
+    String privateViewKeyHex = "7b37d8922245a07244fd31855d1e705a590a9bd2881825f0542ad99cdaba090a";
 
     System.out.println("subaddress for account index 0, subaddress index 1: "
-      + WalletAddress.getSubaddressBase58(privateViewKey, hexToBytes(walletAddress.getPublicSpendKeyHex()), 0, 1));
+      + walletAddress.getSubaddressBase58(privateViewKeyHex, 0, 1));
 
 
     // tests
@@ -128,9 +132,9 @@ public class WalletAddress {
 
     assertEquals(walletAddress.getBase58(), mainAddress);
     assertEquals(mainAddress, addr00);
-    assertEquals(getSubaddressBase58(privateViewKey, hexToBytes(walletAddress.getPublicSpendKeyHex()), 0, 1), addr01);
-    assertEquals(getSubaddressBase58(privateViewKey, hexToBytes(walletAddress.getPublicSpendKeyHex()), 1, 0), addr10);
-    assertEquals(getSubaddressBase58(privateViewKey, hexToBytes(walletAddress.getPublicSpendKeyHex()), 1, 1), addr11);
+    assertEquals(walletAddress.getSubaddressBase58(privateViewKeyHex, 0, 1), addr01);
+    assertEquals(walletAddress.getSubaddressBase58(privateViewKeyHex, 1, 0), addr10);
+    assertEquals(walletAddress.getSubaddressBase58(privateViewKeyHex, 1, 1), addr11);
 
   }
 
